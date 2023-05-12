@@ -1,4 +1,12 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 
 @Component({
   selector: 'app-server-element',
@@ -8,7 +16,24 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
   // encapsulation:ViewEncapsulation.None //-> RESPECTS DEFAULT CSS (DISABLES ENCAPSULATION)
   encapsulation: ViewEncapsulation.ShadowDom, //-> SAME AS EMULATED ONLY IN BROWSERS WHICH SUPPORT IT....DIG DEEPER
 })
-export class ServerElementComponent {
+export class ServerElementComponent implements OnInit, AfterViewChecked {
   // YOU CAN ASSIGN AN ALIAS TO THE INPUT, MAKE SURE IT IS UPDATED IN HTML IN THIS CASE srvElement is the alias for element
   @Input('srvElement') element: { type: string; name: string; content: string };
+  @ViewChild('heading', { static: true }) header: ElementRef;
+  constructor() {
+    console.log('Constructor Called');
+  }
+
+  ngOnChanges() {
+    console.log('ngOnChanges called');
+  }
+
+  ngOnInit(): void {
+    console.log('ngOnInit called');
+    console.log(this.header.nativeElement.textContent);
+  }
+
+  ngAfterViewChecked(): void {
+    console.log(this.header.nativeElement.textContent);
+  }
 }
