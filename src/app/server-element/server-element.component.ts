@@ -1,6 +1,8 @@
 import {
+  AfterContentInit,
   AfterViewChecked,
   Component,
+  ContentChild,
   ElementRef,
   Input,
   OnInit,
@@ -16,10 +18,13 @@ import {
   // encapsulation:ViewEncapsulation.None //-> RESPECTS DEFAULT CSS (DISABLES ENCAPSULATION)
   encapsulation: ViewEncapsulation.ShadowDom, //-> SAME AS EMULATED ONLY IN BROWSERS WHICH SUPPORT IT....DIG DEEPER
 })
-export class ServerElementComponent implements OnInit, AfterViewChecked {
+export class ServerElementComponent
+  implements OnInit, AfterViewChecked, AfterContentInit
+{
   // YOU CAN ASSIGN AN ALIAS TO THE INPUT, MAKE SURE IT IS UPDATED IN HTML IN THIS CASE srvElement is the alias for element
   @Input('srvElement') element: { type: string; name: string; content: string };
   @ViewChild('heading', { static: true }) header: ElementRef;
+  @ContentChild('contentParagraph', { static: true }) paragraph: ElementRef;
   constructor() {
     console.log('Constructor Called');
   }
@@ -31,6 +36,17 @@ export class ServerElementComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     console.log('ngOnInit called');
     console.log(this.header.nativeElement.textContent);
+    console.log(
+      'Text Content of Paragraph:',
+      this.paragraph.nativeElement.textContent
+    );
+  }
+
+  ngAfterContentInit(): void {
+    console.log(
+      'Text Content of Paragraph:',
+      this.paragraph.nativeElement.textContent
+    );
   }
 
   ngAfterViewChecked(): void {
